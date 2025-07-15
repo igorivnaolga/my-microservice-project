@@ -1,0 +1,15 @@
+image:
+  repository: 349298600530.dkr.ecr.ap-southeast-2.amazonaws.com/lesson-6-ecr
+  tag: latest
+  pullPolicy: ifNotPresent
+
+service:
+  type: LoadBalancer
+  port: 8000
+
+ingress:
+  enabled: true
+
+env:
+  DJANGO_SETTINGS_MODULE: 'mysite.settings'
+  DATABASE_URL: 'postgres://postgres:<password>@<rds-endpoint>:5432/postgres'

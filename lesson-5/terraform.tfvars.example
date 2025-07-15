@@ -1,6 +1,0 @@
-# terraform.tfvars  (never commit this file)
-db_name              = "mydb"
-db_user              = "user1"
-db_password          = "SuperSecret123"
-db_subnet_group_name = "rds-private-sng"
-private_subnets      = ["subnet-abc123", "subnet-def456"] 
