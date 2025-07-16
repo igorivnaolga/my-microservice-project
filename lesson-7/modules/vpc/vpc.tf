@@ -9,12 +9,13 @@ resource "aws_vpc" "main" {
 }
 
 resource "aws_subnet" "public" {
-  count             = length(var.public_subnets)
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = var.public_subnets[count.index]
-  availability_zone = var.availability_zones[count.index]
+  map_public_ip_on_launch = true  # ✅ Enables auto-assign public IP
+  count                   = length(var.public_subnets)
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = var.public_subnets[count.index]
+  availability_zone       = var.availability_zones[count.index]
 
-  tags = {
+  tags                    = {
     Name = "${var.vpc_name}-public-subnet-${count.index + 1}"
   }
 }
