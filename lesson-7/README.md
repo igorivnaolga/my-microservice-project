@@ -1,30 +1,4 @@
-# Terraform AWS Infrastructure — Lesson 5
-
-## 📁 Project Structure
-
-```
-terraform-practice/
-├── main.tf                  # Main configuration that includes modules
-├── variables.tf             # Global input variables
-├── outputs.tf               # Global output values
-├── backend.tf
-├── terraform.tfvars
-├── modules/
-│   ├── s3-backend/          # S3 & DynamoDB module for state storage and locking
-│   │   ├── s3.tf
-|   |   ├── dynamodb.tf
-│   │   ├── variables.tf
-│   │   └── outputs.tf
-│   ├── vpc/                 # VPC module for networking infrastructure
-│   │   ├── vpc.tf
-|   |   ├── routes.tf
-│   │   ├── variables.tf
-│   │   └── outputs.tf
-│   └── ecr/                 # ECR module for Docker image repository
-│       ├── ecr.tf
-│       ├── variables.tf
-│       └── outputs.tf
-```
+# Kubernetes Cluster and Django Application Deployment
 
 ## ⚙️ Setup Instructions
 
@@ -82,50 +56,89 @@ terraform plan
 terraform apply
 ```
 
-### 6. **Destroy infrastructure**
+## Prerequisites
 
-Tears down all managed resources:
+### The following must be installed and configured:
 
+AWS account with sufficient permissions
+AWS CLI configured (aws configure)
+Docker installed and running
+kubectl installed
+Helm installed
+Terraform installed
+
+### Step 1: Build and Upload Docker Image to ECR
+
+Authenticate Docker with ECR:
+```bash
+aws ecr get-login-password --region <your-region> | docker login --username AWS --password-stdin <your-account-id>.dkr.ecr.<your-region>.amazonaws.com
+```
+
+Create a Docker image:
+```bash
+docker build -t django-app .
+```
+
+Add a tag to the image:
+```bash
+docker tag django-app:latest <your-account-id>.dkr.ecr.<your-region>.amazonaws.com/ecr-dev
+```
+
+Upload the image to ECR:
+```bash
+docker push <your-account-id>.dkr.ecr.<your-region>.amazonaws.com/ecr-dev
+```
+
+### Step 2: Configure kubectl
+
+Update the kubeconfig in the EKS cluster:
+```bash
+aws eks --region <your-region> update-kubeconfig --name <your-cluster-name>
+```
+
+Verify access to the cluster:
+```bash
+kubectl get nodes
+```
+
+### Step 3: Deploy Django App using Helm
+
+Go to the Helm chart directory:
+```bash
+cd charts/django-app
+```
+
+Update values.yaml to add the ECR image repository and tag.
+
+Install the chart:
+```bash
+helm install my-django .
+```
+
+Verify access to the cluster:
+```bash
+kubectl get nodes
+```
+
+Get the external URL:
+```bash
+kubectl get svc
+```
+
+Look for the EXTERNAL-IP of the service. Open the Django app in a browser:
+
+http://<external-elb-dns>
+
+### Step 4: Clean up Resources
+
+To remove all resources:
+
+Uninstall the Helm chart:
+```bash
+helm uninstall my-django
+```
+
+Destroy the Terraform resources:
 ```bash
 terraform destroy
 ```
-
----
-
-## Module Descriptions
-
-### `s3-backend`
-
-This module creates:
-
-- An S3 bucket for storing the Terraform state file
-- A DynamoDB table for state locking
-- A separate log bucket with a lifecycle rule
-
-> Used to manage and lock Terraform state securely.
-
----
-
-### `vpc`
-
-This module creates:
-
-- A VPC with a specified CIDR block
-- Public and private subnets across availability zones
-- An internet gateway and routing tables
-
-> Sets up the foundational AWS networking environment.
-
----
-
-### `ecr`
-
-This module creates:
-
-- An Amazon ECR repository for Docker images
-- Enables automatic image scanning
-- Configures repository access policy
-
-> Ideal for deploying containerized applications to ECS or EKS.
-
----
