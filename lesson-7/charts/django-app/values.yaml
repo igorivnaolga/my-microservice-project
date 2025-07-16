@@ -1,5 +1,5 @@
 image:
-  repository: 349298600530.dkr.ecr.ap-southeast-2.amazonaws.com/lesson-6-ecr
+  repository: 349298600530.dkr.ecr.ap-southeast-2.amazonaws.com/ecr-dev
   tag: latest
   pullPolicy: ifNotPresent
 
@@ -11,5 +11,5 @@ ingress:
   enabled: true
 
 env:
-  DJANGO_SETTINGS_MODULE: 'mysite.settings'
-  DATABASE_URL: 'postgres://postgres:<password>@<rds-endpoint>:5432/postgres'
+  DJANGO_SETTINGS_MODULE: 'myproject.settings'
+  DATABASE_URL: 'postgres://user:password@host:port/dbname'

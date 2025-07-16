@@ -1,7 +1,7 @@
 # Підключаємо модуль S3 та DynamoDB
 module "s3_backend" {
   source      = "./modules/s3-backend"
-  bucket_name = "terraform-bucket-dev"
+  bucket_name = "terraform-bucket-dev-349298600530"
   table_name  = "terraform-locks"
 }
 
