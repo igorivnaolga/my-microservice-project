@@ -48,7 +48,7 @@
                       scope: GLOBAL
                       id: github-token
                       username: igorivnaolga
-                      password: <github-token>
+                      password: 
                       description: GitHub PAT
       seed-job: |
         jobs:
