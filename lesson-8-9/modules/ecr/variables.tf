@@ -15,11 +15,6 @@ variable "image_tag_mutability" {
   default     = "MUTABLE"
 }
 
-variable "environment" {
-  description = "Environment name (e.g. dev, prod)"
-  type        = string
-}
-
 variable "force_delete" {
   type        = bool
   description = "Якщо true, видалення репо автоматично видаляє всі образи всередині."
