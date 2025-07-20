@@ -1,11 +1,11 @@
 variable "region" {
   description = "AWS region for deployment"
-  default     = "us-east-1"
+  default     = "ap-southeast-2"
 }
 
 variable "cluster_name" {
   description = "Name of the EKS cluster"
-  default     = "example-eks-cluster"
+  default     = "example-eks-cluster-olga"
 }
 
 variable "subnet_ids" {
@@ -15,12 +15,12 @@ variable "subnet_ids" {
 
 variable "node_group_name" {
   description = "Name of the node group"
-  default     = "example-node-group"
+  default     = "example-node-group-olga"
 }
 
 variable "instance_type" {
   description = "EC2 instance type for the worker nodes"
-  default     = "t3.medium"
+  default     = "t3.micro"
 }
 
 variable "desired_size" {

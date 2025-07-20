@@ -34,8 +34,8 @@
     - job-dsl:latest
 
   serviceAccount:
-     name: jenkins-sa
-     create: false
+    name: jenkins-sa
+    create: false
 
   JCasC:
     configScripts:
@@ -47,8 +47,8 @@
                   - usernamePassword:
                       scope: GLOBAL
                       id: github-token
-                      username: igorivnaolga
-                      password: 
+                      username: ${github_user}
+                      password: ${github_pat}
                       description: GitHub PAT
       seed-job: |
         jobs:
@@ -58,10 +58,10 @@
                 scm {
                   git {
                     remote {
-                      url('<https://github.com/AndriyDmitriv/infra.git>')
+                      url('${github_repo_url}')
                       credentials('github-token')
                     }
-                    branches('*/main')
+                    branches('*/lesson-8-9')
                   }
                 }
                 steps {
@@ -73,10 +73,10 @@
                             scm {
                               git {
                                 remote {
-                                  url("<https://github.com/AndriyDmitriv/infra.git>")
+                                  url("${github_repo_url}")
                                   credentials("github-token")
                                 }
-                                branches("*/main")
+                                branches("*/lesson-8-9")
                               }
                             }
                           }
@@ -86,5 +86,3 @@
                   }
                 }
               }
-
-
