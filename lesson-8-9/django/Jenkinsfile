@@ -39,6 +39,12 @@ spec:
       steps {
         container('kaniko') {
           sh '''
+            echo "Listing django folder:"
+            ls -l /home/jenkins/agent/workspace/goit-django-docker/lesson-8-9/django
+            echo "Listing lesson-8-9 folder:"
+            ls -l /home/jenkins/agent/workspace/goit-django-docker/lesson-8-9
+
+            echo "Running kaniko build..."
             echo "Building and pushing image: ${ECR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
             /kaniko/executor \
               --context /home/jenkins/agent/workspace/goit-django-docker/lesson-8-9/django \
