@@ -58,11 +58,11 @@ spec:
         container('git') {
           withCredentials([usernamePassword(credentialsId: 'github-token', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PAT')]) {
             sh '''
-              echo $USERNAME
+              echo "Git username: $GIT_USERNAME"
               git clone https://$GIT_USERNAME:$GIT_PAT@github.com/igorivnaolga/my-microservice-project.git -b lesson-8-9
               set -x 
               cd my-microservice-project
-              git checkout -b cd
+              git checkout cd || git checkout -b cd
               cd charts/django-app
 
               sed -i \"s/tag: .*/tag: $IMAGE_TAG/\" values.yaml
