@@ -41,12 +41,12 @@ spec:
           dir('lesson-8-9/django') {
             sh '''
               echo "Dockerfile path: ${WORKSPACE}/lesson-8-9/django/Dockerfile
-              /kaniko/executor \\
-                --context ./lesson-8-9/django \\
-                --dockerfile ${WORKSPACE}/lesson-8-9/django/Dockerfile \\
-                --destination=$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \\
-                --cache=true \\
-                --insecure \\
+              /kaniko/executor \
+                --context ./lesson-8-9/django \
+                --dockerfile ${WORKSPACE}/lesson-8-9/django/Dockerfile \
+                --destination=$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \
+                --cache=true \
+                --insecure \
                 --skip-tls-verify
             '''
           }
