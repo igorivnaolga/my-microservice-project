@@ -40,9 +40,11 @@ spec:
       steps {
         container('kaniko') {
           sh '''
+            echo "Listing directory contents:"
+            ls -l /home/jenkins/agent/workspace/goit-django-docker/lesson-8-9/django
             /kaniko/executor \
-              --context `pwd`/lesson-8-9/django \
-              --dockerfile=Dockerfile \
+              --context `pwd` \
+              --dockerfile lesson-8-9/django/Dockerfile
               --destination=$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \
               --cache=true \
               --insecure \
