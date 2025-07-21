@@ -48,7 +48,7 @@ spec:
             echo "Building and pushing image: ${ECR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
             /kaniko/executor \
               --context /home/jenkins/agent/workspace/goit-django-docker/lesson-8-9/django \
-              --dockerfile Dockerfile \
+              --dockerfile /home/jenkins/agent/workspace/goit-django-docker/lesson-8-9/django/Dockerfile
               --destination ${ECR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} \
               --cache=true \
               --insecure \
