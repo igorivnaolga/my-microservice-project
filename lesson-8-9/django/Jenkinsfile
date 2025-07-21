@@ -10,18 +10,17 @@ metadata:
 spec:
   serviceAccountName: jenkins-sa
   containers:
-    - name: kaniko
-      image: gcr.io/kaniko-project/executor:v1.16.0-debug
-      imagePullPolicy: Always
-      command:
-        - sleep
-      args:
-        - 99d
-     # Lightweight container that has git + coreutils
-    - name: git
-      image: alpine/git
-      command: ["cat"]       # keep it idle so Jenkins can exec into it
-      tty: true
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:v1.16.0-debug
+    imagePullPolicy: Always
+    command:
+    - sleep
+    args:
+    - 99d
+  - name: git
+    image: alpine/git
+    command: ["cat"]
+    tty: true
 """
     }
   }
@@ -40,12 +39,11 @@ spec:
       steps {
         container('kaniko') {
           sh '''
-            echo "Listing directory contents:"
-            ls -l /home/jenkins/agent/workspace/goit-django-docker/lesson-8-9/django
+            echo "Building and pushing image: ${ECR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
             /kaniko/executor \
-              --context `pwd` \
-              --dockerfile lesson-8-9/django/Dockerfile
-              --destination=$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \
+              --context /home/jenkins/agent/workspace/goit-django-docker/lesson-8-9/django \
+              --dockerfile Dockerfile \
+              --destination ${ECR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} \
               --cache=true \
               --insecure \
               --skip-tls-verify
@@ -59,20 +57,18 @@ spec:
         container('git') {
           withCredentials([usernamePassword(credentialsId: 'github-token', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PAT')]) {
             sh '''
-              echo "Git username: $GIT_USERNAME"
-              git clone https://$GIT_USERNAME:$GIT_PAT@github.com/igorivnaolga/my-microservice-project.git -b lesson-8-9
-              set -x 
+              git clone https://${GIT_USERNAME}:${GIT_PAT}@github.com/igorivnaolga/my-microservice-project.git -b lesson-8-9
               cd my-microservice-project
               git checkout cd || git checkout -b cd
               cd charts/django-app
 
-              sed -i \"s/tag: .*/tag: $IMAGE_TAG/\" values.yaml
+              sed -i "s/tag: .*/tag: ${IMAGE_TAG}/" values.yaml
 
-              git config user.email "$COMMIT_EMAIL"
-              git config user.name "$COMMIT_NAME"
+              git config user.email "${COMMIT_EMAIL}"
+              git config user.name "${COMMIT_NAME}"
 
               git add values.yaml
-              git commit -m "Update image tag to $IMAGE_TAG"
+              git commit -m "Update image tag to ${IMAGE_TAG}"
               git push -f origin cd
             '''
           }
