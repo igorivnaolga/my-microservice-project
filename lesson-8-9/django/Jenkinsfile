@@ -40,7 +40,6 @@ spec:
       steps {
         container('kaniko') {
           sh '''
-            cd django
             /kaniko/executor \\
               --context `pwd` \\
               --dockerfile `pwd`/Dockerfile \\
