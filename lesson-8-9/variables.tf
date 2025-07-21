@@ -17,7 +17,7 @@ variable "vpc_name" {
 variable "instance_type" {
   description = "EC2 instance type for the worker nodes"
   type        = string
-  default     = "t3.micro"
+  default     = "t3.medium"
 }
 
 variable "repository_name" {
