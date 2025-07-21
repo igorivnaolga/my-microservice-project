@@ -56,23 +56,23 @@ spec:
     stage('Update Chart Tag in Git') {
       steps {
         container('git') {
-          withCredentials([usernamePassword(credentialsId: 'github-token', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+          withCredentials([usernamePassword(credentialsId: 'github-token', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PAT')]) {
             sh '''
               echo $USERNAME
-              git clone https://$USERNAME:$PASSWORD@github.com/igorivnaolga/my-microservice-project.git
-              set -x
+              git clone https://$GIT_USERNAME:$GIT_PAT@github.com/igorivnaolga/my-microservice-project.git -b lesson-8-9
+              set -x 
               cd my-microservice-project
-              git checkout lesson-8-9
-              cd lesson-8-9/charts/django-app
+              git checkout -b cd
+              cd charts/django-app
 
-              sed -i "s/tag: .*/tag: $IMAGE_TAG/" values.yaml
+              sed -i \"s/tag: .*/tag: $IMAGE_TAG/\" values.yaml
 
               git config user.email "$COMMIT_EMAIL"
               git config user.name "$COMMIT_NAME"
 
               git add values.yaml
               git commit -m "Update image tag to $IMAGE_TAG"
-              git push origin lesson-8-9
+              git push -f origin cd
             '''
           }
         }
