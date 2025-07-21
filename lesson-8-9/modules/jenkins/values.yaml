@@ -58,10 +58,12 @@
                 scm {
                   git {
                     remote {
-                      url('${github_repo_url}')
+                      url('https://github.com/igorivnaolga/my-microservice-project.git')
                       credentials('github-token')
+                      refspec('+refs/heads/*:refs/remotes/origin/*')
                     }
-                    branches('*/lesson-8-9')
+                    branches('lesson-8-9')
+
                   }
                 }
                 steps {
@@ -73,10 +75,12 @@
                             scm {
                               git {
                                 remote {
-                                  url("${github_repo_url}")
-                                  credentials("github-token")
+                                  url('https://github.com/igorivnaolga/my-microservice-project.git')
+                                  credentials('github-token')
+                                  refspec('+refs/heads/*:refs/remotes/origin/*')
                                 }
-                                branches("*/lesson-8-9")
+                                branches('lesson-8-9')
+
                               }
                             }
                           }
