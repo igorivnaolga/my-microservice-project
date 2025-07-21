@@ -38,16 +38,17 @@ spec:
     stage('Build & Push Docker Image') {
       steps {
         container('kaniko') {
-          sh '''
-            cd lesson-8-9/django
-            /kaniko/executor \
-              --context . \
-              --dockerfile Dockerfile \
-              --destination=$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \
-              --cache=true \
-              --insecure \
-              --skip-tls-verify
-          '''
+          dir('lesson-8-9/django') {
+            sh '''
+              /kaniko/executor \\
+                --context . \\
+                --dockerfile Dockerfile \\
+                --destination=$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \\
+                --cache=true \\
+                --insecure \\
+                --skip-tls-verify
+            '''
+          }
         }
       }
     }
