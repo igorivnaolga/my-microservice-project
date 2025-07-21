@@ -41,7 +41,7 @@ spec:
           dir('lesson-8-9/django') {
             sh '''
               /kaniko/executor \\
-                --context . \\
+                --context ./lesson-8-9/django \\
                 --dockerfile django/Dockerfile \\
                 --destination=$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \\
                 --cache=true \\
