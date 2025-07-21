@@ -39,13 +39,14 @@ spec:
       steps {
         container('kaniko') {
           sh '''
+            cd django
             /kaniko/executor \\
-            --context /home/jenkins/agent/workspace/goit-django-docker/lesson-8-9/django \\
-            --dockerfile Dockerfile \\
-            --destination ${ECR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} \\
-            --cache=true \\
-            --insecure \\
-            --skip-tls-verify
+              --context `pwd` \\
+              --dockerfile `pwd`/Dockerfile \\
+              --destination=$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \\
+              --cache=true \\
+              --insecure \\
+              --skip-tls-verify
           '''
         }
       }
