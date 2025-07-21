@@ -91,6 +91,20 @@ resource "helm_release" "jenkins" {
     file("${path.module}/values.yaml")
   ]
   set = [
-    "controller.JCasC.configScripts.credentials=credentials:\n  system:\n    domainCredentials:\n      - credentials:\n          - usernamePassword:\n              scope: GLOBAL\n              id: github-token\n              username: ${var.github_user}\n              password: ${var.github_pat}\n              description: GitHub PAT"
+    {
+      name = "controller.JCasC.configScripts.credentials"
+      value = <<EOT
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - usernamePassword:
+              scope: GLOBAL
+              id: github-token
+              username: ${var.github_user}
+              password: ${var.github_pat}
+              description: GitHub PAT
+EOT
+    }
   ]
 }
