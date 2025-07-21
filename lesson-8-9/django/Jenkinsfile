@@ -40,10 +40,11 @@ spec:
         container('kaniko') {
           dir('lesson-8-9/django') {
             sh '''
-              echo "Dockerfile path: ${WORKSPACE}/lesson-8-9/django/Dockerfile"
+              sh 'ls -l ./lesson-8-9/django/Dockerfile'
+              sh 'cat ./lesson-8-9/django/Dockerfile | head -n 5'
               /kaniko/executor \
                 --context ./lesson-8-9/django \
-                --dockerfile ${WORKSPACE}/lesson-8-9/django/Dockerfile \
+                --dockerfile Dockerfile \
                 --destination=$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \
                 --cache=true \
                 --insecure \
