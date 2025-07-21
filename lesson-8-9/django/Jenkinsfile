@@ -40,7 +40,7 @@ spec:
         container('kaniko') {
           dir('lesson-8-9/django') {
             sh '''
-              echo "Dockerfile path: ${WORKSPACE}/lesson-8-9/django/Dockerfile
+              echo "Dockerfile path: ${WORKSPACE}/lesson-8-9/django/Dockerfile"
               /kaniko/executor \
                 --context ./lesson-8-9/django \
                 --dockerfile ${WORKSPACE}/lesson-8-9/django/Dockerfile \
