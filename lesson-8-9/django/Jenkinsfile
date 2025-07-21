@@ -35,24 +35,26 @@ spec:
   }
 
   stages {
-    stage('Build & Push Docker Image') {
-      container('kaniko') {
-        dir('lesson-8-9/django') {
-          sh 'ls -l Dockerfile' // Check if Dockerfile exists
 
-          sh '''
-            /kaniko/executor \
-              --context . \
-              --dockerfile Dockerfile \
-              --destination=$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \
-              --cache=true \
-              --insecure \
-              --skip-tls-verify
-          '''
+    stage('Build & Push Docker Image') {
+      steps {
+        container('kaniko') {
+          dir('lesson-8-9/django') {
+            sh 'ls -l Dockerfile' // Перевірка наявності Dockerfile
+
+            sh '''
+              /kaniko/executor \
+                --context . \
+                --dockerfile Dockerfile \
+                --destination=$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \
+                --cache=true \
+                --insecure \
+                --skip-tls-verify
+            '''
+          }
         }
       }
     }
-  }
 
     stage('Update Chart Tag in Git') {
       steps {
@@ -77,5 +79,6 @@ spec:
         }
       }
     }
+
   }
 }
