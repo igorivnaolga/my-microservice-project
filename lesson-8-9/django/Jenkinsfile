@@ -39,7 +39,7 @@ spec:
     stage('Build & Push Docker Image') {
       steps {
         container('kaniko') {
-          dir('lesson-8-9/django') {
+          dir('lesson-8-9/Django') {
             sh 'ls -l Dockerfile' // Перевірка наявності Dockerfile
 
             sh '''
