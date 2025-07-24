@@ -95,6 +95,6 @@ module "jenkins" {
 module "argo_cd" {
   source       = "./modules/argo_cd"
   namespace    = "argocd"
-  chart_version = "5.46.4"
+  chart_version = "8.1.3"
   depends_on    = [module.eks]
 }

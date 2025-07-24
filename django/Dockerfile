@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY requirements.txt .
 
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
 #ENV POSTGRES_HOST=${POSTGRES_HOST}
 #ENV POSTGRES_PORT=${POSTGRES_PORT}
