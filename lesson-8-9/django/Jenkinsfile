@@ -44,9 +44,8 @@ spec:
 
             sh '''
               /kaniko/executor \
-                --context . \
-                --context-sub-path lesson-8-9/django \
-                --dockerfile Dockerfile \
+                --context=lesson-8-9/django \
+                --dockerfile=Dockerfile \
                 --destination=$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \
                 --cache=true \
                 --insecure \
