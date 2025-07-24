@@ -1,3 +1,4 @@
+
 # Kubernetes Cluster and Django Application Deployment
 
 ## ⚙️ Setup Instructions
@@ -142,3 +143,4 @@ Destroy the Terraform resources:
 ```bash
 terraform destroy
 ```
+
