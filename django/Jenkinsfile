@@ -37,10 +37,9 @@ spec:
   stages {
 
     stage('Build & Push Docker Image') {
-      stage('Build & Push Docker Image') {
-  steps {
+      steps {
     container('kaniko') {
-      dir('lesson-8-9/django') {
+      dir('django') {
         sh 'ls -l Dockerfile'  // перевірка наявності файлу
 
         sh '''
@@ -48,7 +47,6 @@ spec:
             --context=. \
             --dockerfile=Dockerfile \
             --destination=$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \
-            --cache=true \
             --insecure \
             --skip-tls-verify
         '''
@@ -56,7 +54,6 @@ spec:
     }
   }
 }
-
 
     stage('Update Chart Tag in Git') {
       steps {
