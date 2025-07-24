@@ -1,6 +1,6 @@
 image:
   repository: 349298600530.dkr.ecr.ap-southeast-2.amazonaws.com/ecr-repo-349298600530
-  tag: latest
+  tag: v1.0.19
   pullPolicy: IfNotPresent
 
 service:
