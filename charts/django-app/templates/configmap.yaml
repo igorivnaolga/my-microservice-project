@@ -3,5 +3,6 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-config
 data:
-  DJANGO_SETTINGS_MODULE: {{ .Values.env.DJANGO_SETTINGS_MODULE | quote }}
-  DATABASE_URL: {{ .Values.env.DATABASE_URL | quote }}
+  {{- range $key, $val := .Values.config }}
+  {{ $key }}: {{ $val | quote }}
+  {{- end }}

@@ -1,15 +1,31 @@
 image:
   repository: 349298600530.dkr.ecr.ap-southeast-2.amazonaws.com/ecr-dev
-  tag: v1.0.3
-  pullPolicy: IfNotPresent
+  tag: latest
+  pullPolicy: Always
 
 service:
   type: LoadBalancer
   port: 8000
 
 ingress:
-  enabled: true
+  enabled: false
 
-env:
-  DJANGO_SETTINGS_MODULE: 'myproject.settings'
-  DATABASE_URL: 'postgres://user:password@host:port/dbname'
+config:
+  POSTGRES_HOST: django-postgresql
+  POSTGRES_PORT: 5432
+  POSTGRES_DB: django_db
+  POSTGRES_USER: django_user
+  POSTGRES_PASSWORD: pass12345
+
+postgresql:
+  enabled: true
+  global:
+    postgresql:
+      auth:
+        postgresPassword: pass12345
+        username: django_user
+        database: django_db
+        password: pass12345
+  primary:
+    persistence:
+      size: 2Gi
