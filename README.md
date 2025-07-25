@@ -1,5 +1,5 @@
 
-# Terraform, Jenkins, Argo CD
+# Terraform, Jenkins, Argo CD, RDS
 
 ## ⚙️ Setup Instructions
 
@@ -79,7 +79,47 @@ Login: admin.
 After Jenkins job execution, ArgoCD application is in Synced state.
 
 
-### 7. **Destroy the Terraform resources**
+### 7. RDS configuration options
+
+You can configure the RDS module using the following variables in terraform.tfvars or as command-line options.
+
+#### Configuration file
+
+You can configure the RDS module using the following variables in terraform.tfvars:
+
+rds_publicly_accessible = true # false for private access
+rds_use_aurora = true # false for standard RDS instance
+rds_multi_az = false # true for multi-AZ deployment
+rds_instance_class = "db.t3.medium" # Instance class for RDS
+rds_backup_retention_period = "0" # Set to "0" for no backups, or specify the number of days for backups
+
+#### Database engine and version can be configured using the following variables:
+
+rds_aurora_engine = "aurora-postgresql" # Engine for Aurora cluster
+rds_aurora_engine_version = "15.3" # Version for Aurora cluster
+rds_aurora_parameter_group_family = "aurora-postgresql15" # Parameter group family for Aurora cluster 
+rds_instance_engine = "postgres" # Engine for standard RDS instance
+rds_instance_engine_version = "17.2" # Version for standard RDS instance
+rds_instance_parameter_group_family = "postgres17" # Parameter group family for standard RDS instance
+rds_instance_class = "db.t4g.medium" # Instance class for standard RDS instance
+CLI options
+
+#### You can also configure the RDS module using command-line options when running Terraform:
+
+terraform apply -target=module.rds \
+  -var="rds_publicly_accessible=true" \
+  -var="rds_use_aurora=false" \
+  -var="rds_multi_az=false" \
+  -var="rds_instance_class=db.t4g.medium"
+
+#### RDS setup examples
+Aurora cluster with public access:
+terraform apply -target=module.rds \
+  -var="rds_publicly_accessible=true" \
+  -var="rds_use_aurora=true" 
+
+
+### 8. **Destroy the Terraform resources**
 ```bash
 terraform destroy
 ```
