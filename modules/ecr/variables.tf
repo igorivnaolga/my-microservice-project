@@ -1,5 +1,5 @@
 variable "repository_name" {
-  description = "Name ECR-repo"
+  description = "Name of the ECR repository"
   type        = string
 }
 
@@ -11,18 +11,18 @@ variable "scan_on_push" {
 
 variable "image_tag_mutability" {
   type        = string
-  description = "IMMUTABLE заблокує зміну існуючих тегів; MUTABLE дозволяє перезапис."
+  description = "IMMUTABLE prevents changes to existing tags; MUTABLE allows overwriting."
   default     = "MUTABLE"
 }
 
 variable "force_delete" {
   type        = bool
-  description = "Якщо true, видалення репо автоматично видаляє всі образи всередині."
+  description = "If true, deleting the repository will also delete all images inside it."
   default     = true
 }
 
 variable "repository_policy" {
   type        = string
-  description = "JSON-політика репозиторію."
+  description = "JSON policy for the repository."
   default     = null
 }

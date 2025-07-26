@@ -1,9 +1,9 @@
-# IAM-роль для EKS-кластера
+# IAM-role for EKS-cluster
 resource "aws_iam_role" "eks" {
-  # Ім'я IAM-ролі для кластера EKS
+  # Name of IAM-role for EKS-cluster
   name = "${var.cluster_name}-eks-cluster"
 
-  # Політика, яка дозволяє сервісу EKS «асумувати» цю IAM-роль
+  # A policy that allows the EKS service to assume this IAM role
   assume_role_policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -20,36 +20,36 @@ resource "aws_iam_role" "eks" {
 POLICY
 }
 
-# Прив'язка IAM-ролі до політики AmazonEKSClusterPolicy
+# Attach IAM role to AmazonEKSClusterPolicy
 resource "aws_iam_role_policy_attachment" "eks" {
-  # ARN політики, що надає дозволи для EKS-кластера
+  # ARN of the policy that grants permissions for the EKS cluster
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
 
-  # IAM-роль, до якої прив'язується політика
+  # IAM role to which the policy is attached
   role = aws_iam_role.eks.name
 }
 
-# Створення EKS-кластера
+# Create EKS cluster
 resource "aws_eks_cluster" "eks" {
-  # Назва кластера
+  # Name of the cluster
   name     = var.cluster_name
 
-  # ARN IAM-ролі, яка потрібна для керування кластером
+  # ARN of the IAM role required to manage the cluster
   role_arn = aws_iam_role.eks.arn
   
-  # Налаштування мережі (VPC)
+  # Network configuration (VPC)
   vpc_config {
-    endpoint_private_access = true   # Включає приватний доступ до API-сервера
-    endpoint_public_access  = true   # Включає публічний доступ до API-сервера
-    subnet_ids = var.subnet_ids      # Список підмереж, де буде працювати EKS
+    endpoint_private_access = true   # Enables private access to the API server
+    endpoint_public_access  = true   # Enables public access to the API server
+    subnet_ids = var.subnet_ids      # List of subnets where the EKS will run
   }
 
-  # Налаштування доступу до EKS-кластера
+  # Access configuration for the EKS cluster
   access_config {
-    authentication_mode                         = "API"  # Автентифікація через API
-    bootstrap_cluster_creator_admin_permissions = true   # Надає адміністративні права користувачу, який створив кластер
+    authentication_mode                         = "API"  # Authentication via API
+    bootstrap_cluster_creator_admin_permissions = true   # Grants admin permissions to the user who created the cluster
   }
 
-  # Залежність від IAM-політики для ролі EKS
+  # Dependency on IAM policy attachment for the EKS role
   depends_on = [aws_iam_role_policy_attachment.eks]
 }
