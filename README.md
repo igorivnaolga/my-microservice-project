@@ -1,25 +1,34 @@
 
-# Terraform, Jenkins, Argo CD, RDS
+# Final DevOps Project – AWS Infrastructure with Terraform
 
-## ⚙️ Setup Instructions
+This project sets up a complete CI/CD pipeline and monitoring stack using AWS, Terraform, and various DevOps tools including Jenkins, Argo CD, EKS, RDS, ECR, Prometheus, and Grafana.
 
-### The following must be installed and configured:
+## Prerequisites
 
-AWS account with sufficient permissions
-AWS CLI configured (aws configure)
-Docker installed and running
-kubectl installed
-Helm installed
-Terraform installed
+### Make sure the following are installed and configured:
+
+- AWS account with sufficient permissions
+- AWS CLI configured (aws configure)
+- Docker installed and running
+- kubectl installed
+- Helm installed
+- Terraform installed
 
 ###  Create `terraform.tfvars` File
 
 Rename `terraform.tfvars.example` to `terraform.tfvars` and fill in the required values:
 
 ```hcl
-github_user         = "username"
-github_pat          = "your_github_token"
-github_repo_url     = "your_github_repo_url"
+github_repo_url = "https://github.com/<github_username>/<project_name>.git"
+github_branch = "main"
+github_user = "github_username"
+github_pat = "github_token"
+
+rds_password = "password_for_rds_db"
+rds_publicly_accessible = true
+rds_use_aurora = true
+rds_multi_az = false
+rds_backup_retention_period = "0"
 ```
 
 ## 🛠️ Terraform Commands
@@ -119,7 +128,21 @@ terraform apply -target=module.rds \
   -var="rds_use_aurora=true" 
 
 
-### 8. **Destroy the Terraform resources**
+### Monitoring
+
+- forward Grafana port using the next command:
+```bash
+kubectl port-forward -n monitoring svc/kube-prometheus-stack-grafana 3000:80
+```
+- open URL http://localhost:3000
+- login with username admin and password from the next command
+```bash
+kubectl get secret --namespace monitoring kube-prometheus-stack-grafana -o jsonpath="{.data.admin-password}" | base64 --decode
+```
+- check existing dashboards to see the CPU and Memory usage (PODs, Nodes etc.)
+
+
+### 9. **Destroy the Terraform resources**
 ```bash
 terraform destroy
 ```

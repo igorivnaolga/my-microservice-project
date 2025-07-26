@@ -1,9 +1,9 @@
-# IAM-роль для EC2-вузлів (Worker Nodes)
+# IAM role for EC2 nodes (Worker Nodes)
 resource "aws_iam_role" "nodes" {
-  # Ім'я ролі для вузлів
+  # Name of the role for the nodes
   name = "${var.cluster_name}-eks-nodes"
 
-  # Політика, що дозволяє EC2 асумувати роль
+  # Policy that allows EC2 to assume this role
   assume_role_policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -20,67 +20,67 @@ resource "aws_iam_role" "nodes" {
 POLICY
 }
 
-# Прив'язка політики для EKS Worker Nodes
+# Attach policy for EKS Worker Nodes
 resource "aws_iam_role_policy_attachment" "amazon_eks_worker_node_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
   role       = aws_iam_role.nodes.name
 }
 
-# Прив'язка політики для Amazon VPC CNI плагіну
+# Attach policy for Amazon VPC CNI plugin
 resource "aws_iam_role_policy_attachment" "amazon_eks_cni_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
   role       = aws_iam_role.nodes.name
 }
 
-# Прив'язка політики для читання з Amazon ECR
+# Attach policy for read-only access to Amazon ECR
 resource "aws_iam_role_policy_attachment" "amazon_ec2_container_registry_read_only" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   role       = aws_iam_role.nodes.name
 }
 
-# Створення Node Group для EKS
+# Create Node Group for EKS
 resource "aws_eks_node_group" "general" {
-  # Ім'я EKS-кластера
+  # Name of the EKS cluster
   cluster_name = aws_eks_cluster.eks.name
   
-  # Ім'я групи вузлів
+  # Name of the node group
   node_group_name = "general"
   
-  # IAM-роль для вузлів
+  # IAM role for the nodes
   node_role_arn = aws_iam_role.nodes.arn
 
-  # Підмережі, де будуть EC2-вузли
+  # Subnets where EC2 nodes will be launched
   subnet_ids = var.subnet_ids
 
-  # Тип EC2-інстансів для вузлів
+  # EC2 instance type for the nodes
   capacity_type  = "ON_DEMAND"
   instance_types = ["${var.instance_type}"]
 
-  # Конфігурація масштабування
+  # Autoscaling configuration
   scaling_config {
-    desired_size = var.desired_size  # Бажана кількість вузлів
-    max_size     = var.max_size      # Максимальна кількість вузлів
-    min_size     = var.min_size      # Мінімальна кількість вузлів
+    desired_size = var.desired_size  # Desired number of nodes
+    max_size     = var.max_size      # Maximum number of nodes
+    min_size     = var.min_size      # Minimum number of nodes
   }
 
-  # Конфігурація оновлення вузлів
+  # Node update configuration
   update_config {
-    max_unavailable = 1  # Максимальна кількість вузлів, які можна оновлювати одночасно
+    max_unavailable = 1  # Max number of nodes that can be unavailable during update
   }
 
-  # Додає мітки до вузлів
+  # Add labels to the nodes
   labels = {
-    role = "general"  # Тег "role" зі значенням "general"
+    role = "general"  # "role" tag with value "general"
   }
 
-  # Залежності для створення Node Group
+  # Dependencies for creating the Node Group
   depends_on = [
     aws_iam_role_policy_attachment.amazon_eks_worker_node_policy,
     aws_iam_role_policy_attachment.amazon_eks_cni_policy,
     aws_iam_role_policy_attachment.amazon_ec2_container_registry_read_only,
   ]
 
-  # Ігнорує зміни в desired_size, щоб уникнути конфліктів
+  # Ignore changes to desired_size to prevent conflicts
   lifecycle {
     ignore_changes = [scaling_config[0].desired_size]
   }

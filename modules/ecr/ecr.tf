@@ -1,16 +1,16 @@
 # ECR Repository
 resource "aws_ecr_repository" "ecr" {
-  name                 = var.repository_name           # Ім’я репозиторію
-  force_delete         = var.force_delete              # Дозволяє видаляти репо разом з образами
-  image_tag_mutability = var.image_tag_mutability      # IMMUTABLE або MUTABLE
+  name                 = var.repository_name           # Name of the repository
+  force_delete         = var.force_delete              # Allows deleting the repo along with its images
+  image_tag_mutability = var.image_tag_mutability      # IMMUTABLE or MUTABLE
 
-  # Автоматичне сканування security‑вразливостей під час push
+  # Automatically scan for security vulnerabilities on image push
   image_scanning_configuration {
-    scan_on_push = var.scan_on_push                    # true → увімкнути
+    scan_on_push = var.scan_on_push                    # true → enable
   }
 
   encryption_configuration {
-    encryption_type = "AES256"                         # Або "KMS" + key_id, якщо потрібен свій ключ
+    encryption_type = "AES256"                         # Or "KMS" + key_id if using a custom key
   }
 
   tags = {
@@ -19,7 +19,7 @@ resource "aws_ecr_repository" "ecr" {
 }
 
 # ECR Repository Policy
-# Доступ лише для акаунтів/ролей із вашого AWS‑тенанта.
+# Access allowed only for accounts/roles within your AWS tenant.
 data "aws_caller_identity" "current" {}
 
 locals {

@@ -19,14 +19,14 @@ provider "aws" {
   region = var.region
 }
 
-# Підключаємо модуль S3 та DynamoDB
-#module "s3_backend" {
-#  source      = "./modules/s3-backend"
-#  bucket_name = "terraform-bucket-dev-349298600530"
-#  table_name  = "terraform-locks"
-#}
+# Connect module S3 and DynamoDB
+module "s3_backend" {
+  source      = "./modules/s3-backend"
+  bucket_name = "terraform-bucket-dev-349298600530"
+  table_name  = "terraform-locks"
+}
 
-# Підключаємо модуль VPC
+# Connect module VPC
 module "vpc" {
   source             = "./modules/vpc"
   vpc_cidr           = "10.0.0.0/16"
@@ -36,7 +36,7 @@ module "vpc" {
   vpc_name           = var.vpc_name
 }
 
-# Підключаємо модуль ECR
+# Connect module ECR
 module "ecr" {
   source          = "./modules/ecr"
   repository_name = var.repository_name
@@ -45,12 +45,12 @@ module "ecr" {
 
 module "eks" {
   source          = "./modules/eks"          
-  cluster_name  = var.cluster_name              # Назва кластера
-  subnet_ids    = module.vpc.public_subnets     # ID підмереж
-  instance_type = var.instance_type             # Тип інстансів
-  desired_size  = 2                             # Бажана кількість нодів
-  max_size      = 3                             # Максимальна кількість нодів
-  min_size      = 1                             # Мінімальна кількість нодів                            # Мінімальна кількість нодів
+  cluster_name  = var.cluster_name              # Name of cluster
+  subnet_ids    = module.vpc.public_subnets     # ID of subnets
+  instance_type = var.instance_type             # Type of instance
+  desired_size  = 2                             # Desired quantities of nodes
+  max_size      = 3                             # Max quantities of nodes
+  min_size      = 1                             # Min quantities of nodes                            # Мінімальна кількість нодів
 }
 
 data "aws_eks_cluster" "eks" {
@@ -141,5 +141,12 @@ module "rds" {
   }
   depends_on = [
     module.vpc
+  ]
+}
+
+module "monitoring" {
+  source = "./modules/monitoring"
+  depends_on = [
+    module.eks
   ]
 }
