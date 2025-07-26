@@ -20,11 +20,11 @@ provider "aws" {
 }
 
 # Connect module S3 and DynamoDB
-module "s3_backend" {
-  source      = "./modules/s3-backend"
-  bucket_name = "terraform-bucket-dev-349298600530"
-  table_name  = "terraform-locks"
-}
+#module "s3_backend" {
+#  source      = "./modules/s3_backend"
+#  bucket_name = var.bucket_name
+#  table_name  = var.table_name
+#}
 
 # Connect module VPC
 module "vpc" {

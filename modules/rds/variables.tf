@@ -82,7 +82,7 @@ variable "use_aurora" {
 
 variable "backup_retention_period" {
   type    = string
-  default = ""
+  default = "7"
 }
 
 variable "tags" {
