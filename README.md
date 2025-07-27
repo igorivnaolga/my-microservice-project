@@ -56,6 +56,11 @@ Creates or updates infrastructure:
 ```bash
 terraform apply
 ```
+Connect kubectl to your cluster:
+
+```bash
+aws eks update-kubeconfig --region ap-southeast-2 --name <your_cluster_name>
+```
 
 ### 4. **Get Jenkins URL**
 
@@ -68,6 +73,8 @@ Use login: admin, password: admin123
 - Create a new pipeline job using the seed job.
 - On Jenkins settings page select Script Approval and approve seed job script.
 - Run the pipeline job to build the Docker image and push it to ECR.
+
+![Jenkins UI](data/Jenkins.png)
 
 
 ### 6. **ArgoCD**
@@ -87,6 +94,8 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 Login: admin.
 After Jenkins job execution, ArgoCD application is in Synced state.
 
+![ArgoCD UI](data/agro.png)
+
 
 ### 7. RDS configuration options
 
@@ -102,31 +111,6 @@ rds_multi_az = false # true for multi-AZ deployment
 rds_instance_class = "db.t3.medium" # Instance class for RDS
 rds_backup_retention_period = "0" # Set to "0" for no backups, or specify the number of days for backups
 
-#### Database engine and version can be configured using the following variables:
-
-rds_aurora_engine = "aurora-postgresql" # Engine for Aurora cluster
-rds_aurora_engine_version = "15.3" # Version for Aurora cluster
-rds_aurora_parameter_group_family = "aurora-postgresql15" # Parameter group family for Aurora cluster 
-rds_instance_engine = "postgres" # Engine for standard RDS instance
-rds_instance_engine_version = "17.2" # Version for standard RDS instance
-rds_instance_parameter_group_family = "postgres17" # Parameter group family for standard RDS instance
-rds_instance_class = "db.t4g.medium" # Instance class for standard RDS instance
-CLI options
-
-#### You can also configure the RDS module using command-line options when running Terraform:
-
-terraform apply -target=module.rds \
-  -var="rds_publicly_accessible=true" \
-  -var="rds_use_aurora=false" \
-  -var="rds_multi_az=false" \
-  -var="rds_instance_class=db.t4g.medium"
-
-#### RDS setup examples
-Aurora cluster with public access:
-terraform apply -target=module.rds \
-  -var="rds_publicly_accessible=true" \
-  -var="rds_use_aurora=true" 
-
 
 ### Monitoring
 
@@ -141,9 +125,19 @@ kubectl get secret --namespace monitoring kube-prometheus-stack-grafana -o jsonp
 ```
 - check existing dashboards to see the CPU and Memory usage (PODs, Nodes etc.)
 
+![Grafana Dashboard](data/grafana.png)
+
 
 ### 9. **Destroy the Terraform resources**
 ```bash
 terraform destroy
+```
+or:
+
+```bash
+chmod +x destroy.sh
+
+./destroy.sh
+
 ```
 
