@@ -60,7 +60,7 @@ spec:
         container('git') {
           withCredentials([usernamePassword(credentialsId: 'github-token', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PAT')]) {
             sh '''
-              git clone https://${GIT_USERNAME}:${GIT_PAT}@github.com/igorivnaolga/my-microservice-project.git -b lesson-8-9
+              git clone https://${GIT_USERNAME}:${GIT_PAT}@github.com/igorivnaolga/my-microservice-project.git -b main
               cd my-microservice-project
               git checkout cd || git checkout -b cd
               cd charts/django-app
