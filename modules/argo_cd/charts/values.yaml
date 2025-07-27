@@ -6,7 +6,7 @@ applications:
       # repoURL: https://github.com/YOUR_USERNAME/example-repo.git
       repoURL: ${github_repo_url}  # Git repository URL where the Helm chart or Kubernetes manifests are stored
       path: charts/django-app      # path inside the repo to the required chart or YAML files
-      targetRevision: lesson-8-9   # Git branch or tag to deploy from (e.g., main)
+      targetRevision: main   # Git branch or tag to deploy from (e.g., main)
       helm:
         valueFiles:                # list of YAML files with settings passed to the Helm chart
           - values.yaml
