@@ -2,6 +2,8 @@ image:
   repository: 349298600530.dkr.ecr.ap-southeast-2.amazonaws.com/ecr-dev
   tag: latest
   pullPolicy: Always
+  pullSecrets:
+    - name: ecr-creds
 
 service:
   type: LoadBalancer

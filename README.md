@@ -57,10 +57,10 @@ Creates or updates infrastructure:
 terraform apply
 ```
 
-### 4. **Get all namespaces and find jenkins URL from list**
+### 4. **Get Jenkins URL**
 
 ```bash
-kubectl get svc --all-namespaces
+kubectl get all -n jenkins
 ```
 Use login: admin, password: admin123
 
@@ -73,10 +73,10 @@ Use login: admin, password: admin123
 ### 6. **ArgoCD**
 Terraform configuration includes Argo CD setup. ArgoCD applications and repositories are defined in the modules/argo_cd/charts directory and created during the Terraform apply.
 
-Get ArgoCD URL from list:
+Get ArgoCD URL:
 
 ```bash
-kubectl get svc --all-namespaces
+kubectl get all -n argocd
 ```
 
 To access the ArgoCD UI, you need to get the initial admin password. Run the following command:
